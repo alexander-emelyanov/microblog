@@ -55,3 +55,7 @@ target/
 
 # PyCharm and any JetBrain IDE
 .idea
+
+# Database files and migrations repository
+app.db
+db_repository/

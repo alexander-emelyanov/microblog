@@ -29,8 +29,10 @@ from app import views
 if not app.debug:
 
     import logging
-    from logging.handlers import SMTPHandler
 
+    from logging.handlers import SMTPHandler, RotatingFileHandler
+
+    # SMTP based handler configuration
     credentials = None
     secure = None
 
@@ -42,4 +44,14 @@ if not app.debug:
 
     mail_handler = SMTPHandler((MAIL_SERVER, MAIL_PORT), MAIL_USERNAME, ADMINS, 'Microblog failure', credentials, secure)
     mail_handler.setLevel(logging.ERROR)
+
+    # File based handler
+    file_handler = RotatingFileHandler('tmp/microblog.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    file_handler.setLevel(logging.INFO)
+
+    # Set handlers
+    app.logger.setLevel(logging.INFO)
     app.logger.addHandler(mail_handler)
+    app.logger.addHandler(file_handler)
+    app.logger.info('Microblog startup')

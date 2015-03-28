@@ -102,7 +102,7 @@ def user_view(nickname):
 @login_required
 def user_edit():
 
-    form = UserEditForm()
+    form = UserEditForm(g.user.nickname)
 
     if form.validate_on_submit():
         g.user.nickname = form.nickname.data
